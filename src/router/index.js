@@ -13,27 +13,35 @@ const asyncRouterMap = [{
   name: 'Product',
   meta: {
     title: '商品',
+    icon: 'inbox',
+    hidden: false,
   },
   component: Home,
   children: [{
-    path: '/list',
+    path: 'list',
     name: 'ProductList',
     meta: {
       title: '商品列表',
+      icon: 'unordered-list',
+      hidden: false,
     },
     component: () => import('@/views/page/ProductList.vue'),
   }, {
-    path: '/add',
+    path: 'add',
     name: 'ProductAdd',
     meta: {
       title: '添加商品',
+      icon: 'file-add',
+      hidden: false,
     },
     component: () => import('@/views/page/ProductAdd.vue'),
   }, {
-    path: '/category',
+    path: 'category',
     name: 'Category',
     meta: {
       title: '类目管理',
+      icon: 'project',
+      hidden: false,
     },
     component: () => import('@/views/page/Category.vue'),
   }],
@@ -46,6 +54,8 @@ const routes = [
     component: Home,
     meta: {
       title: '首页',
+      icon: 'home',
+      hidden: false,
     },
     children: [
       {
@@ -53,6 +63,8 @@ const routes = [
         name: 'Index',
         meta: {
           title: '统计',
+          icon: 'number',
+          hidden: false,
         },
         component: () => import('@/views/page/Index.vue'),
       },
@@ -64,6 +76,7 @@ const routes = [
     component: Login,
     meta: {
       title: '登录',
+      hidden: true,
     },
   },
 ];
@@ -80,8 +93,11 @@ router.beforeEach((to, from, next) => {
       const menuRoutes = getMenuRoute(user.role, asyncRouterMap);
       if (!isAddRoutes) {
         isAddRoutes = true;
-        console.log(router.getRoutes(), routes.concat(menuRoutes));
-        store.dispatch('changeMenuRoutes', routes.concat(menuRoutes));
+        // 这里待考虑 将router.addRoutes(menuRoutes);写在then外面就不行 首次进入http://localhost:8080/#/product/list 页面空白
+        store.dispatch('changeMenuRoutes', routes.concat(menuRoutes)).then(() => {
+          router.addRoutes(menuRoutes);
+          next();
+        });
       }
       return next();
     }
