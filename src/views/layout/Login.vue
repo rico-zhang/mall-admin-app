@@ -14,6 +14,7 @@
           v-model="loginForm.password"
           type="password"
           autocomplete="off"
+          @pressEnter="submitForm('loginForm')"
         />
       </a-form-model-item>
 
@@ -54,8 +55,8 @@ export default {
 
     return {
       loginForm: {
-        password: '',
-        email: '',
+        password: 'vhlsqi18.COM',
+        email: '1425618127@qq.com',
       },
       rules: {
         password: [{ validator: validatePass, trigger: 'change' }],
@@ -72,8 +73,10 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           api.login(this.loginForm).then(
-            () => {
-              this.$router.push('/');
+            (res) => {
+              console.log(res);
+              this.$store.dispatch('setUserInfo', res);
+              this.$router.push({ name: 'Home' });
             },
             (err) => {
               this.$message.error(err);

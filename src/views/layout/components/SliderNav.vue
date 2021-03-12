@@ -17,7 +17,7 @@
     </div>
     <ul class="user-info">
       <li>
-        欢迎 rico
+        欢迎 {{ user.username }}
         <a-icon type="down" />
       </li>
       <li>退出</li>
@@ -26,10 +26,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
-    return {
-    };
+    return {};
+  },
+  computed: {
+    ...mapState(['user']),
   },
   methods: {
     toggleCollapsed() {
