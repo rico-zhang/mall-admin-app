@@ -17,6 +17,8 @@ export default new Vuex.Store({
       eamail: '',
     }, */
     user: getUserCookie(),
+    // 菜单路由
+    menuRoutes: [],
   },
   mutations: {
     changeCollapsed(state) {
@@ -32,6 +34,9 @@ export default new Vuex.Store({
       };
       removeUserCookie();
     },
+    changeMenuRoutes(state, menuRoutes) {
+      state.menuRoutes = menuRoutes;
+    },
   },
   actions: {
     changeCollapsed({ commit }) {
@@ -42,6 +47,9 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit('logout');
+    },
+    changeMenuRoutes({ commit }, menuRoutes) {
+      commit('changeMenuRoutes', menuRoutes);
     },
   },
   modules: {
