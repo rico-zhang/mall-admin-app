@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from '@/store';
+
 import Home from '../views/layout/Home.vue';
 import Login from '../views/layout/Login.vue';
 
@@ -28,6 +30,16 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+});
+
+router.beforeEach((to, form, next) => {
+  if (to.path !== '/login') {
+    const { user } = store.state;
+    if (user.appkey && user.appkey && user.role) {
+      return next();
+    }
+    return next('/login');
+  } return next();
 });
 
 export default router;
