@@ -30,7 +30,6 @@
   </div>
 </template>
 <script>
-import api from '@/api/category';
 
 export default {
   data() {
@@ -39,18 +38,16 @@ export default {
         searchWord: '',
         category: '',
       },
-      categoryList: [],
     };
   },
+  props: ['categoryList'],
   methods: {
     handleSubmit() {
       this.$emit('submit', this.searchForm);
     },
   },
   created() {
-    api.list().then((res) => {
-      this.categoryList = res.data;
-    });
+
   },
 };
 </script>
