@@ -1,12 +1,16 @@
 import axios from 'axios';
+import store from '@/store';
 
 const instance = axios.create({
   baseURL: 'https://mallapi.duyiedu.com/',
 });
 instance.interceptors.request.use((request) => {
   console.log(request);
-  // if (request.url.includes(''))
-  return request;
+  if (request.url.includes('/passport')) return request;
+  const config = request;
+  config.params = config.params || {};
+  Object.assign(config.params, { appkey: store.state.user.appkey });
+  return config;
 }, (error) => Promise.reject(error));
 
 instance.interceptors.response.use((response) => {

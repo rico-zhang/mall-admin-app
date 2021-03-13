@@ -51,7 +51,6 @@ export default {
   watch: {
     $route: {
       handler() {
-        console.log(this.$router);
         this.currentRoutes = this.$router.currentRoute.matched;
       },
       immediate: true,

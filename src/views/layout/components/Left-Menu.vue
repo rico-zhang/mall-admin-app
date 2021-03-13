@@ -38,8 +38,5 @@ export default {
   computed: {
     ...mapState(['collapsed']),
   },
-  created() {
-    console.log(this.$router);
-  },
 };
 </script>

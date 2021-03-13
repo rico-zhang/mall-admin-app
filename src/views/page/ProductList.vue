@@ -1,11 +1,20 @@
 <template>
-  <div class="product-list">商品列表</div>
+  <div class="product-list">
+    <search-box @submit="submit" />
+  </div>
 </template>
 
 <script>
+import SearchBox from '@/components/Search.vue';
+
 export default {
-  created() {
-    console.log(this.$router);
+  components: {
+    SearchBox,
+  },
+  methods: {
+    submit(data) {
+      console.log(data);
+    },
   },
 };
 </script>
