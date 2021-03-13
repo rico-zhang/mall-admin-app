@@ -4,7 +4,13 @@
       <a-step v-for="item in steps" :key="item.title" :title="item.title" />
     </a-steps>
     <div class="steps-content">
-      <component :is="steps[current].cmpName" @next="next" />
+      <component
+        :is="steps[current].cmpName"
+        :form="form"
+        @next="next"
+        @prev="prev"
+        @finish="finish"
+      />
     </div>
   </div>
 </template>
@@ -12,6 +18,8 @@
 <script>
 import BasicDetail from '@/components/BasicDetail.vue';
 import SaleDetail from '@/components/SaleDetail.vue';
+
+import productApi from '@/api/product';
 
 export default {
   data() {
@@ -27,15 +35,34 @@ export default {
           cmpName: 'SaleDetail',
         },
       ],
+      form: {
+        title: '',
+        desc: '',
+        category: '',
+        c_items: [],
+        tags: [],
+        price: 0,
+        price_off: 0,
+        unit: '',
+        inventory: 0,
+        images: [],
+      },
     };
   },
   methods: {
-    next(form) {
+    next() {
       this.current += 1;
-      console.log(form);
     },
     prev() {
       this.current -= 1;
+    },
+    finish() {
+      console.log(this.form);
+      productApi.add(this.form).then((res) => {
+        console.log(res);
+        this.$message.success('新增成功');
+        this.$router.push({ name: 'ProductList' });
+      });
     },
   },
   components: {

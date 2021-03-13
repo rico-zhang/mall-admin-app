@@ -54,23 +54,17 @@ import categoryApi from '@/api/category';
 export default {
   data() {
     return {
-      form: {
-        title: '',
-        desc: '',
-        category: '',
-        c_items: [],
-        tags: [],
-      },
       categoryList: [],
       categoryItems: [],
       rules: {},
     };
   },
+  props: ['form'],
   methods: {
     next() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          this.$emit('next', this.form);
+          this.$emit('next');
           return true;
         }
         return false;
