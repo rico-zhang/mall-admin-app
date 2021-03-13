@@ -19,7 +19,7 @@
     </div>
     <ul class="user-info">
       <li>
-        欢迎 {{ user.username }}
+        {{ user.username }}
         <a-icon type="down" />
       </li>
       <li @click="logout">退出</li>
@@ -58,3 +58,13 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="less">
+.user-info {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: #fff;
+}
+</style>

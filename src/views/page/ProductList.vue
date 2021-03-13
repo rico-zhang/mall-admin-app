@@ -1,7 +1,16 @@
 <template>
   <div class="product-list">
     <search-box :categoryList="categoryList" @submit="submit" />
-    <product-table :data="tableData" :page="page" @changePage="changePage" />
+    <a-button class="product-add-btn">
+      <router-link :to="{ name: 'ProductAdd' }">新增商品</router-link>
+    </a-button>
+    <product-table
+      :data="tableData"
+      :page="page"
+      @changePage="changePage"
+      @edit="edit"
+      @remove="remove"
+    />
   </div>
 </template>
 
@@ -64,6 +73,26 @@ export default {
         this.categoryMap = new Map(map);
       });
     },
+    edit(record) {
+      this.$router.push({ name: 'ProductEdit', params: { id: record.id } });
+    },
+    remove(record) {
+      this.$confirm({
+        title: '删除',
+        content: () => (
+          <div style="color:red">确认删除标题为{record.title}的产品吗</div>
+        ),
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk: () => {
+          productApi.remove({ id: record.id }).then(() => {
+            this.getTableData();
+          });
+        },
+        onCancel: () => {},
+      });
+    },
   },
   async created() {
     this.page = this.defaultPage;
@@ -72,3 +101,14 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="less">
+.product-list {
+  position: relative;
+  .product-add-btn {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+  }
+}
+</style>
