@@ -9,9 +9,11 @@
     </a-button>
     <div class="breakcrumb">
       <a-breadcrumb>
-        <a-breadcrumb-item>首页</a-breadcrumb-item>
         <a-breadcrumb-item>
-          <a href="">统计</a>
+          {{ currentRoutes[0] ? currentRoutes[0].meta.title : "" }}
+        </a-breadcrumb-item>
+        <a-breadcrumb-item>
+          {{ currentRoutes[1] ? currentRoutes[1].meta.title : "" }}
         </a-breadcrumb-item>
       </a-breadcrumb>
     </div>
@@ -30,7 +32,9 @@ import { mapState } from 'vuex';
 
 export default {
   data() {
-    return {};
+    return {
+      currentRoutes: [],
+    };
   },
   computed: {
     ...mapState(['user']),
@@ -42,6 +46,15 @@ export default {
     logout() {
       this.$store.dispatch('logout');
       this.$router.push('/login');
+    },
+  },
+  watch: {
+    $route: {
+      handler() {
+        console.log(this.$router);
+        this.currentRoutes = this.$router.currentRoute.matched;
+      },
+      immediate: true,
     },
   },
 };
