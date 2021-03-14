@@ -4,13 +4,15 @@
       <a-step v-for="item in steps" :key="item.title" :title="item.title" />
     </a-steps>
     <div class="steps-content">
-      <component
-        :is="steps[current].cmpName"
-        :form="form"
-        @next="next"
-        @prev="prev"
-        @finish="finish"
-      />
+      <keep-alive>
+        <component
+          :is="steps[current].cmpName"
+          :form="form"
+          @next="next"
+          @prev="prev"
+          @finish="finish"
+        />
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -39,7 +41,7 @@ export default {
         title: '',
         desc: '',
         category: '',
-        c_items: [],
+        c_item: '',
         tags: [],
         price: 0,
         price_off: 0,
@@ -57,17 +59,31 @@ export default {
       this.current -= 1;
     },
     finish() {
-      console.log(this.form);
-      productApi.add(this.form).then((res) => {
-        console.log(res);
-        this.$message.success('新增成功');
-        this.$router.push({ name: 'ProductList' });
-      });
+      if (this.$route.params.id) {
+        productApi.edit(this.form).then(() => {
+          this.$message.success('修改成功');
+          this.$router.push({ name: 'ProductList' });
+        });
+      } else {
+        productApi.add(this.form).then(() => {
+          this.$message.success('新增成功');
+          this.$router.push({ name: 'ProductList' });
+        });
+      }
     },
   },
   components: {
     BasicDetail,
     SaleDetail,
+  },
+  created() {
+    const { id } = this.$route.params;
+    if (id) {
+      // 如果有id 说明是编辑 没有id 说明是新增
+      productApi.detail(id).then((res) => {
+        this.form = res;
+      });
+    }
   },
 };
 </script>

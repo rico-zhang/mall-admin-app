@@ -7,23 +7,23 @@
       :model="form"
       :rules="rules"
     >
-      <a-form-model-item label="标题" required prop="title" >
+      <a-form-model-item label="标题" required prop="title">
         <a-input v-model="form.title" />
       </a-form-model-item>
       <a-form-model-item label="商品描述" prop="desc">
         <a-input v-model="form.desc" />
       </a-form-model-item>
       <a-form-model-item label="商品类目" required prop="category">
-        <a-select v-model="form.category" placeholder="请选择商品类目">
+        <a-select
+          v-model="form.category"
+          placeholder="请选择商品类目"
+          @change="categoryChange"
+        >
           <a-select-option v-for="c of categoryList" :value="c.id" :key="c.id">
             {{ c.name }}
           </a-select-option>
         </a-select>
-        <a-select
-          v-model="form.c_items"
-          mode="multiple"
-          placeholder="请选择子类目"
-        >
+        <a-select v-model="form.c_item" placeholder="请选择子类目">
           <a-select-option v-for="ci of categoryItems" :value="ci" :key="ci">
             {{ ci }}
           </a-select-option>
@@ -70,6 +70,9 @@ export default {
         return false;
       });
     },
+    categoryChange() {
+      this.form.c_item = '';
+    },
   },
   created() {
     categoryApi.list().then((res) => {
@@ -79,7 +82,6 @@ export default {
   watch: {
     'form.category': {
       handler() {
-        this.form.c_items = [];
         this.categoryItems = this.categoryList.find(
           (item) => item.id === this.form.category,
         ).c_items;

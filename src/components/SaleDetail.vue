@@ -106,5 +106,15 @@ export default {
       });
     },
   },
+  created() {
+    if (this.form.images.length) {
+      this.fileList = this.form.images.map((item, index) => ({
+        uid: index,
+        name: item.slice(item.lastIndexOf('/') + 1),
+        status: 'done',
+        url: item,
+      }));
+    }
+  },
 };
 </script>
